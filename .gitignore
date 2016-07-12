@@ -1,0 +1,12 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/OrbitalHearts/OrbitalHearts/Debug
+/OrbitalHearts/Debug
+/OrbitalHearts/.vs/OrbitalHearts/v14
+/OrbitalHearts/OrbitalHearts.VC.db
+/OrbitalHearts/OrbitalHearts.VC.VC.opendb
+/OrbitalHearts/OrbitalHearts/OrbitalHearts.vcxproj.user
+/OrbitalHearts/OrbitalHearts/OrbitalHearts.vcxproj.filters
+/OrbitalHearts/OrbitalHearts/OrbitalHearts.vcxproj
