@@ -1,49 +1,78 @@
-#include <SFML/Graphics.hpp>
+#include <iostream>
+#include <SFML/System.hpp>
 #include <SFML/Window.hpp>
+#include <SFML/Graphics.hpp>
+#include "GameMap.hpp"
+#include "World.hpp"
+#include "WindowManager.hpp"
 
-
-
-void updateGame(sf::Time deltaTime)
+void updateGame(World& world, float deltaTime)
 {
-
+	world.update(deltaTime);
 }
 
-void endGame(sf::Window& window)
+void drawGame(World& world)
+{
+	WindowManager::instance().getWindow().clear();
+	world.draw();
+	WindowManager::instance().getWindow().display();
+}
+
+void endGame()
 {
 	//save data here
+	WindowManager::instance().getWindow().close();
+}
 
-	window.close();
+void handleInputs(World& world)
+{
+	sf::Event event;
+	while (WindowManager::instance().getWindow().pollEvent(event))
+	{
+		switch (event.type)
+		{
+		case sf::Event::Closed:
+			endGame();
+			break;
+		case sf::Event::MouseButtonPressed:
+			break;
+		case sf::Event::MouseButtonReleased:
+			break;
+		default:
+			break;
+		}
+	}
 }
 
 //consider multithreading with a seperate thread for rendering
 
-int main()
+void gameLoop(World& world)
 {
-	sf::RenderWindow window(sf::VideoMode(800, 600), "Orbital Hearts", sf::Style::Default);
-	sf::CircleShape shape(100.f);
-	shape.setFillColor(sf::Color::Green);
-
 	sf::Clock clock;
 
-	while (window.isOpen())
+	while (WindowManager::instance().getWindow().isOpen())
 	{
 		sf::Time deltaTime = clock.restart();
+		handleInputs(world);
+		updateGame(world, deltaTime.asSeconds());
+		//physics
+		//ai
+		drawGame(world);
 
-		updateGame(deltaTime);
-
-		sf::Event event;
-		while (window.pollEvent(event))
-		{
-			if (event.type == sf::Event::Closed)
-				endGame(window);
-		}
-
-		window.clear(); // Required. Draw everything after
-		
-		window.draw(shape);
-		
-		window.display(); // Required
 	}
+}
+
+//Mouse information
+//sf::Vector2i mouseWorldCoords = sf::Mouse::getPosition(window);
+//std::cout << "(" << mouseWorldCoords.x << ", " << mouseWorldCoords.y << ")" << std::endl;
+
+int main()
+{
+	WindowManager::instance();
+	
+	World world = World();
+	
+	gameLoop(world);
 
 	return 0;
 }
